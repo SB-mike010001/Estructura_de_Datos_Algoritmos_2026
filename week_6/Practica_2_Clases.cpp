@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 
 class Empleado {
 private:
@@ -12,25 +13,25 @@ protected:
     double tarifaHora() const {
         if (cargo == "Gerente")
             return 100.0;
-
         else if (cargo == "Operador")
             return 80.0;
-
         else
             return 50.0; // Supervisor
     }
 
 public:
-    Empleado(const std::string& n,const std::string& c, int a) : nombre(n), cargo(c), antiguedad(a) {}
+    Empleado(const std::string& n, const std::string& c, int a)
+        : nombre(n), cargo(c), antiguedad(a) {}
+
     virtual ~Empleado() {}
 
-    std::string getNombre() const { return nombre;}
-    std::string getCargo() const { return cargo;}
-    int getAntiguedad() const { return antiguedad;}
+    std::string getNombre() const { return nombre; }
+    std::string getCargo() const { return cargo; }
+    int getAntiguedad() const { return antiguedad; }
 
-    void setNombre(const std::string& n) { nombre = n;}
-    void setCargo(const std::string& c) { cargo = c;}
-    void setAntiguedad(int a) { antiguedad = a;}
+    void setNombre(const std::string& n) { nombre = n; }
+    void setCargo(const std::string& c) { cargo = c; }
+    void setAntiguedad(int a) { antiguedad = a; }
 
     int prioridadCargo() const {
         if (cargo == "Gerente")
@@ -52,13 +53,17 @@ private:
     int horasTrabajadas;
 
 public:
-    EmpleadoHora(const std::string& n,const std::string& c,int a, int h): Empleado(n, c, a), horasTrabajadas(h) {}
+    EmpleadoHora(const std::string& n,
+                 const std::string& c,
+                 int a,
+                 int h)
+        : Empleado(n, c, a), horasTrabajadas(h) {}
 
     ~EmpleadoHora() override {}
 
-    int getHorasTrabajadas() const { return horasTrabajadas;}
+    int getHorasTrabajadas() const { return horasTrabajadas; }
 
-    void setHorasTrabajadas(int h) { horasTrabajadas = h;}
+    void setHorasTrabajadas(int h) { horasTrabajadas = h; }
 
     double calcularSalario() const override {
         return tarifaHora() * horasTrabajadas;
@@ -74,13 +79,16 @@ public:
         std::cout << "Tipo: " << getTipo() << "\n";
         std::cout << "Antiguedad: " << getAntiguedad() << " anios\n";
         std::cout << "Horas trabajadas: " << horasTrabajadas << "\n";
-        std::cout << "Salario: $"<< calcularSalario() << "\n";
+        std::cout << "Salario: $" << calcularSalario() << "\n";
     }
 };
 
 class EmpleadoPlanta : public Empleado {
 public:
-    EmpleadoPlanta(const std::string& n, const std::string& c, int a) : Empleado(n, c, a) {}
+    EmpleadoPlanta(const std::string& n,
+                   const std::string& c,
+                   int a)
+        : Empleado(n, c, a) {}
 
     ~EmpleadoPlanta() override {}
 
@@ -105,21 +113,22 @@ public:
 void mostrarMayorSalario(const std::vector<Empleado*>& empleados);
 void mostrarMayorTiempo(const std::vector<Empleado*>& empleados);
 void ordenarPorCargo(std::vector<Empleado*>& empleados);
+void guardarReporteTXT(const std::vector<Empleado*>& empleados);
 
 int main() {
 
     std::vector<Empleado*> empleados;
 
-    empleados.push_back( new EmpleadoHora("Juan Perez","Gerente",8,20));
-    empleados.push_back( new EmpleadoPlanta("Nicoll Torres","Supervisor",12));
-    empleados.push_back( new EmpleadoHora("Mike Wazowski","Operador",3,10));
-    empleados.push_back( new EmpleadoPlanta("Ana Ruiz","Gerente",15));
-    empleados.push_back( new EmpleadoHora("Luis Soto","Supervisor",7,25));
-    empleados.push_back( new EmpleadoPlanta("Elena Vera","Operador",10));
-    empleados.push_back( new EmpleadoHora("Pedro Rojas","Operador",5,5));
-    empleados.push_back( new EmpleadoPlanta("Sofia Luna","Supervisor",4));
-    empleados.push_back( new EmpleadoHora("Miguel Gonzales","Gerente",9,15));
-    empleados.push_back( new EmpleadoPlanta("Laura Campos","Operador",6));
+    empleados.push_back(new EmpleadoHora("Juan Perez", "Gerente", 8, 20));
+    empleados.push_back(new EmpleadoPlanta("Nicoll Torres", "Supervisor", 12));
+    empleados.push_back(new EmpleadoHora("Mike Wazowski", "Operador", 3, 10));
+    empleados.push_back(new EmpleadoPlanta("Ana Ruiz", "Gerente", 15));
+    empleados.push_back(new EmpleadoHora("Luis Soto", "Supervisor", 7, 25));
+    empleados.push_back(new EmpleadoPlanta("Elena Vera", "Operador", 10));
+    empleados.push_back(new EmpleadoHora("Pedro Rojas", "Operador", 5, 5));
+    empleados.push_back(new EmpleadoPlanta("Sofia Luna", "Supervisor", 4));
+    empleados.push_back(new EmpleadoHora("Miguel Gonzales", "Gerente", 9, 15));
+    empleados.push_back(new EmpleadoPlanta("Laura Campos", "Operador", 6));
 
     std::cout << "===== LISTA DE EMPLEADOS =====\n\n";
 
@@ -146,12 +155,15 @@ int main() {
             << "\n";
     }
 
+    guardarReporteTXT(empleados);
+
     for (Empleado* e : empleados) {
         delete e;
     }
 
     return 0;
 }
+
 void mostrarMayorSalario(const std::vector<Empleado*>& empleados) {
 
     double mayorSalario = empleados[0]->calcularSalario();
@@ -209,3 +221,33 @@ void ordenarPorCargo(std::vector<Empleado*>& empleados) {
     }
 }
 
+void guardarReporteTXT(const std::vector<Empleado*>& empleados) {
+
+    std::ofstream archivo("reporte_empleados.txt");
+
+    if (!archivo.is_open()) {
+        std::cout << "\nError al crear el archivo.\n";
+        return;
+    }
+
+    archivo << "===== REPORTE DE EMPLEADOS =====\n\n";
+
+    for (Empleado* e : empleados) {
+
+        archivo << "Nombre: " << e->getNombre() << "\n";
+        archivo << "Cargo: " << e->getCargo() << "\n";
+        archivo << "Tipo: " << e->getTipo() << "\n";
+        archivo << "Antiguedad: "
+                << e->getAntiguedad()
+                << " anios\n";
+        archivo << "Salario: $"
+                << e->calcularSalario()
+                << "\n";
+        archivo << "--------------------------\n";
+    }
+
+    archivo.close();
+
+    std::cout << "\nReporte guardado exitosamente en "
+              << "\"reporte_empleados.txt\"\n";
+}
