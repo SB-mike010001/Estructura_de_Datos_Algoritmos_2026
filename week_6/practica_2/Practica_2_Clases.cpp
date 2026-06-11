@@ -106,7 +106,7 @@ int main() {
     empleados.push_back(new EmpleadoHora("Juan Perez", "Gerente", 8, 20));
     empleados.push_back(new EmpleadoPlanta("Nicoll Torres", "Supervisor", 12));
     empleados.push_back(new EmpleadoHora("Mike Wazowski", "Operario", 3, 10));
-    empleados.push_back(new EmpleadoPlanta("Ana Ruiz", "Gerente", 10));
+    empleados.push_back(new EmpleadoPlanta("Eliot Anderson", "Gerente", 10));
     empleados.push_back(new EmpleadoHora("Luis Soto", "Supervisor", 7, 25));
     empleados.push_back(new EmpleadoPlanta("Elena Vera", "Operario", 10));
     empleados.push_back(new EmpleadoHora("Pedro Rojas", "Operario", 5, 5));
