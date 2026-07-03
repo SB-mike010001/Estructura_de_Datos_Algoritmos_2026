@@ -3,26 +3,24 @@
 #include <string>
 #include <limits>
 
-using namespace std;
-
 void mostrarMenu();
-void agregarCliente(queue<string>& cola);
-void atenderCliente(queue<string>& cola);
-void mostrarSiguienteCliente(const queue<string>& cola);
-void mostrarCantidadClientes(const queue<string>& cola);
+void agregarCliente(std::queue<std::string>& cola);
+void atenderCliente(std::queue<std::string>& cola);
+void mostrarSiguienteCliente(const std::queue<std::string>& cola);
+void mostrarCantidadClientes(const std::queue<std::string>& cola);
 
 int main() {
-    queue<string> cola;
+    std::queue<std::string> cola;
     int opcion;
 
     do {
         mostrarMenu();
-        cin >> opcion;
+        std::cin >> opcion;
 
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Entrada invalida." << endl;
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Entrada invalida." << std::endl;
             continue;
         }
 
@@ -44,11 +42,11 @@ int main() {
                 break;
 
             case 5:
-                cout << "Programa finalizado." << endl;
+                std::cout << "Programa finalizado." << std::endl;
                 break;
 
             default:
-                cout << "Opcion invalida." << endl;
+                std::cout << "Opcion invalida." << std::endl;
         }
 
     } while (opcion != 5);
@@ -57,51 +55,51 @@ int main() {
 }
 
 void mostrarMenu() {
-    cout << "\n===== BANCO =====" << endl;
-    cout << "1. Agregar cliente" << endl;
-    cout << "2. Atender cliente" << endl;
-    cout << "3. Mostrar siguiente cliente" << endl;
-    cout << "4. Mostrar cantidad de clientes" << endl;
-    cout << "5. Salir" << endl;
-    cout << "Seleccione una opcion: ";
+    std::cout << "\n===== BANCO =====" << std::endl;
+    std::cout << "1. Agregar cliente" << std::endl;
+    std::cout << "2. Atender cliente" << std::endl;
+    std::cout << "3. Mostrar siguiente cliente" << std::endl;
+    std::cout << "4. Mostrar cantidad de clientes" << std::endl;
+    std::cout << "5. Salir" << std::endl;
+    std::cout << "Seleccione una opcion: ";
 }
 
-void agregarCliente(queue<string>& cola) {
-    string nombre;
+void agregarCliente(std::queue<std::string>& cola) {
+    std::string nombre;
 
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     while (true) {
-        cout << "Ingrese el nombre del cliente: ";
-        getline(cin, nombre);
+        std::cout << "Ingrese el nombre del cliente: ";
+        std::getline(std::cin, nombre);
 
         if (!nombre.empty()) {
             cola.push(nombre);
             break;
         }
 
-        cout << "Nombre invalido." << endl;
+        std::cout << "Nombre invalido." << std::endl;
     }
 }
 
-void atenderCliente(queue<string>& cola) {
+void atenderCliente(std::queue<std::string>& cola) {
     if (cola.empty()) {
-        cout << "No hay clientes en espera." << endl;
+        std::cout << "No hay clientes en espera." << std::endl;
         return;
     }
 
-    cout << "Cliente atendido: " << cola.front() << endl;
+    std::cout << "Cliente atendido: " << cola.front() << std::endl;
     cola.pop();
 }
 
-void mostrarSiguienteCliente(const queue<string>& cola) {
+void mostrarSiguienteCliente(const std::queue<std::string>& cola) {
     if (cola.empty()) {
-        cout << "No hay clientes en espera." << endl;
+        std::cout << "No hay clientes en espera." << std::endl;
     } else {
-        cout << "Siguiente cliente: " << cola.front() << endl;
+        std::cout << "Siguiente cliente: " << cola.front() << std::endl;
     }
 }
 
-void mostrarCantidadClientes(const queue<string>& cola) {
-    cout << "Cantidad de clientes en espera: " << cola.size() << endl;
+void mostrarCantidadClientes(const std::queue<std::string>& cola) {
+    std::cout << "Cantidad de clientes en espera: " << cola.size() << std::endl;
 }
